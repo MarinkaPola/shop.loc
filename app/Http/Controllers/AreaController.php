@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\GoodUserRequest;
+
 use App\Models\User;
 use App\Models\Area;
 use Exception;
@@ -32,28 +32,28 @@ class AreaController extends Controller
 
 
 
-/**
-* Store a newly created resource in storage.
-*
-* @param AreaRequest $request
-* @return JsonResponse
-*/
-public function store(AreaRequest $request)
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param AreaRequest $request
+     * @return JsonResponse
+     */
+    public function store(AreaRequest $request)
 
-{
-    $area = Area::create($request->validated());
-    return $this->created(AreaResource::make($area));
-}
+    {
+        $area = Area::create($request->validated());
+        return $this->created(AreaResource::make($area));
+    }
     /**
      * Display the specified resource.
      *
      * @param  \App\Models\Area  $area
      * @return JsonResponse
      */
-public function show(Area $area)
-{
-    return $this->success(AreaResource::make($area)->load(['areaCategoies']));
-}
+    public function show(Area $area)
+    {
+        return $this->success(AreaResource::make($area)->load(['areaCategoies']));
+    }
 
     /**
      * Update the specified resource in storage.

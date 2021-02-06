@@ -19,17 +19,13 @@ class Good extends Model
         'price',
         'sale',
         'category_id',
+
     ];
 
 
-    public function order()
+    public function goodOrders(): BelongsToMany
     {
-        return $this-> belongsTo(Order::class, 'order_id');
-    }
-
-    public function goodUsers(): BelongsToMany
-    {
-        return $this->belongsToMany(User::class)->withPivot('count')->withTimestamps();
+        return $this->belongsToMany(Order::class)->withPivot('count')->withTimestamps();
     }
 
     public function category()

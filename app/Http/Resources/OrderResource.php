@@ -28,7 +28,7 @@ class OrderResource extends JsonResource
             'buyer_id' => $this->buyer_id,
             'sum' => $this->sum,
             'buyer' => UserResource::make($this->whenLoaded('buyer')),
-
+            'order_goods' => GoodResource::collection($this->whenLoaded('orderGoods')),
         ];
     }
 }

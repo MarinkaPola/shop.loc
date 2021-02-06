@@ -1,7 +1,7 @@
 <?php
 
 namespace Database\Seeders;
-
+use App\Models\Good;
 use App\Models\Order;
 use Illuminate\Database\Seeder;
 
@@ -14,8 +14,15 @@ class OrderSeeder extends Seeder
      *
      * @return void
      */
+
+
     public function run()
     {
-        Order::factory( 20)->create();
+        $orders = Order::factory(30)
+            ->create();
+        foreach ($orders as $order) {
+            $order->orderGoods()->attach(Good::inRandomOrder()->take(2)->get());
+
+        }
     }
 }

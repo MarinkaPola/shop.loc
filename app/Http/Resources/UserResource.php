@@ -27,8 +27,7 @@ class UserResource extends JsonResource
             'country' => $this->country,
             'city' => $this->city,
             'phone' => $this->phone,
-            'role' => $this->role,
-            'buyer_goods' => GoodResource::collection($this->whenLoaded('userGoods')),
+            'role' => $this->role
         ];
     }
 }

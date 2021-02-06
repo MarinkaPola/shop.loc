@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -49,8 +50,8 @@ class Order extends Model
     {
         return $this-> belongsTo(User::class, 'buyer_id');
     }
-  //  public function goods(): HasMany
-   // {
-   //     return $this->hasMany(Good::class, 'order_id');
-   // }
+    public function orderGoods(): BelongsToMany
+    {
+        return $this->belongsToMany(Good::class)->withPivot('count')->withTimestamps();
+    }
 }

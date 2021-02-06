@@ -29,7 +29,6 @@ class GoodResource extends JsonResource
             'price' => $this->price,
             'sale' => $this->sale,
             'category_id' => $this->category_id,
-            'count_in_order' => $this->whenPivotLoaded('good_user', $this->pivot->count),
 
         ];
     }

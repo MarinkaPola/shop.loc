@@ -1,12 +1,12 @@
 <?php
 
-use App\Models\User;
+use App\Models\Order;
 use App\Models\Good;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateGoodUserTable extends Migration
+class CreateGoodOrderTable extends Migration
 {
     /**
      * Run the migrations.
@@ -15,11 +15,11 @@ class CreateGoodUserTable extends Migration
      */
     public function up()
     {
-        Schema::create('good_user', function (Blueprint $table) {
-            $table->foreignIdFor(User::class);
+        Schema::create('good_order', function (Blueprint $table) {
+            $table->foreignIdFor(Order::class);
             $table->foreignIdFor(Good::class);
             $table->integer('count')->default(1);
-            $table->primary(['user_id','good_id']);
+            $table->primary(['order_id','good_id']);
             $table->timestamps();
         });
     }
@@ -31,6 +31,6 @@ class CreateGoodUserTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('good_user');
+        Schema::dropIfExists('good_order');
     }
 }

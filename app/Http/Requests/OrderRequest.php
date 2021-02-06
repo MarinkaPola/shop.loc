@@ -19,17 +19,11 @@ class OrderRequest extends FormRequest
         $rules = [];
         if ($this->isMethod('post')) {
             $rules = [
-                'payment' => [
-                    'required',
-                    Rule::in(['cod', 'cash', 'paymentByCard']),
-                ],
-                'delivery' =>[
-                    'required',
-                    Rule::in(['pickup', 'courierDelivery']),
-                ],
-                'goods_is_paid' => 'required|boolean',
+                'payment' => 'nullable|null',
+                'delivery' =>'nullable|null',
+                'goods_is_paid' =>'nullable|null',
                 'buyer_id' => 'required|integer|exists:users,id',
-                'sum' => 'required|numeric',
+                'sum' => 'nullable|null',
             ];
         } elseif ($this->isMethod('put')) {
             $rules = [

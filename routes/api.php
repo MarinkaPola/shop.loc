@@ -29,7 +29,7 @@ use App\Http\Controllers\AuthController;
 
 Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
-Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');;
+Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
@@ -38,8 +38,8 @@ Route::apiResource('category', CategoryController::class);
 Route::apiResource('area', AreaController::class);
 Route::apiResource('good', GoodController::class);
 Route::apiResource('order', OrderController::class);
-Route::post('/good-in-basket', [GoodController::class, 'good_in_basket']);
-Route::put('/good-out-basket', [GoodController::class, 'good_out_basket']);
+Route::post('/good-in-basket', [OrderController::class, 'good_in_basket']);
+Route::put('/good-out-basket', [OrderController::class, 'good_out_basket']);
 Route::get('/good-sort-by-price', [GoodController::class, 'good_sort_by_price']);
 Route::get('/good-sort-by-desc-price', [GoodController::class, 'good_sort_by_desc_price']);
 Route::get('/good-sort-by-sale', [GoodController::class, 'good_sort_by_sale']);

@@ -26,6 +26,7 @@ class GoodRequest extends FormRequest
                 'price' => 'required|numeric|min:1',
                 'sale' => 'required|integer|min:0|max:70',
                 'category_id' => 'required|integer|exists:categories,id',
+
             ];
         } elseif ($this->isMethod('put')) {
             $rules = [
@@ -36,7 +37,6 @@ class GoodRequest extends FormRequest
                 'price' => 'required|numeric|min:1',
                 'sale' => 'required|integer|min:0|max:70',
                 'category_id' => 'required|integer|exists:categories,id',
-
             ];
         }
         return $rules;

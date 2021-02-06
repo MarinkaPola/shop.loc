@@ -54,7 +54,7 @@ class User extends Authenticatable
      *
      */
     protected $casts = [
-        'email_verified_at' => 'datetime',
+        'email_verified_at'=>'datetime',
     ];
 
     const ROLES = [
@@ -77,9 +77,5 @@ class User extends Authenticatable
     }
 
 
-    public function userGoods(): BelongsToMany
-    {
-        return $this->belongsToMany(Good::class)->withPivot('count')->withTimestamps();
-    }
 
 }
