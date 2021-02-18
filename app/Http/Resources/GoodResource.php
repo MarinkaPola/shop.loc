@@ -29,6 +29,9 @@ class GoodResource extends JsonResource
             'price' => $this->price,
             'sale' => $this->sale,
             'category_id' => $this->category_id,
+            'sale_category' => SaleResource::collection($this->whenLoaded('category')->sales),
+            'sale_area' => SaleResource::collection($this->whenLoaded('category')->areaCategory->sales),
+            'sale_goods' => SaleResource::collection($this->whenLoaded('sales'))
 
         ];
     }

@@ -27,7 +27,7 @@ class AreaController extends Controller
     public function index()
     {
         $areas = Area::all();
-        return AreaResource::collection($areas->load('areaCategoies'));
+        return AreaResource::collection($areas->load(['areaCategoies.sales', 'sales']));
     }
 
 
@@ -52,7 +52,7 @@ class AreaController extends Controller
      */
     public function show(Area $area)
     {
-        return $this->success(AreaResource::make($area)->load(['areaCategoies']));
+        return $this->success(AreaResource::make($area)->load(['areaCategoies','sales']));
     }
 
     /**
@@ -77,11 +77,7 @@ class AreaController extends Controller
      */
     public function destroy(Area $area)
     {
-        try {
-            $area->delete();
-        } catch (Exception $e) {
-            return null;
-        }
+        $area->delete();
         return $this->success('Record deleted.', JsonResponse::HTTP_NO_CONTENT);
     }
 

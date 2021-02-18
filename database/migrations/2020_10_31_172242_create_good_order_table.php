@@ -16,8 +16,8 @@ class CreateGoodOrderTable extends Migration
     public function up()
     {
         Schema::create('good_order', function (Blueprint $table) {
-            $table->foreignIdFor(Order::class);
-            $table->foreignIdFor(Good::class);
+            $table->foreignIdFor(Order::class)->constrained();
+            $table->foreignIdFor(Good::class)->constrained();
             $table->integer('count')->default(1);
             $table->primary(['order_id','good_id']);
             $table->timestamps();

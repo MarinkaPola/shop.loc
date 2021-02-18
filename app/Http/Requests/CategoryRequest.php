@@ -14,19 +14,11 @@ class CategoryRequest extends FormRequest
      */
     public function rules()
     {
-        $rules = [];
-        if ($this->isMethod('post')) {
-            $rules = [
+        return [
                 'title' => 'required|string|min:3|max:100',
                 'area_id'=> 'required|integer|exists:areas,id',
         ];
-        } elseif ($this->isMethod('put')) {
-            $rules = [
-                'title' => 'required|string|min:3|max:100',
-                'area_id'=> 'required|integer|exists:areas,id',
-            ];
-        }
-            return $rules;
+
     }
 
 }

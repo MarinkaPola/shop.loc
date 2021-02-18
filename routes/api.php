@@ -9,6 +9,7 @@ use App\Http\Controllers\GoodController;
 use App\Http\Controllers\AreaController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\SaleController;
 
 
 /*
@@ -33,17 +34,17 @@ Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:sanct
 
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
+    Route::get('/user/basket-now', [UserController::class, 'basket_now']);
 Route::apiResource('user', UserController::class);
 Route::apiResource('category', CategoryController::class);
 Route::apiResource('area', AreaController::class);
-Route::apiResource('good', GoodController::class);
 Route::apiResource('order', OrderController::class);
-Route::post('/good-in-basket', [OrderController::class, 'good_in_basket']);
-Route::put('/good-out-basket', [OrderController::class, 'good_out_basket']);
-Route::get('/good-sort-by-price', [GoodController::class, 'good_sort_by_price']);
-Route::get('/good-sort-by-desc-price', [GoodController::class, 'good_sort_by_desc_price']);
-Route::get('/good-sort-by-sale', [GoodController::class, 'good_sort_by_sale']);
-Route::get('/good-sort-by-desc-sale', [GoodController::class, 'good_sort_by_desc_sale']);
+Route::post('/good/in-basket', [OrderController::class, 'good_in_basket']);
+Route::put('/good/out-basket', [OrderController::class, 'good_out_basket']);
+Route::apiResource('good', GoodController::class);
+Route::apiResource('sale', SaleController::class);
+
+
 
 });
 

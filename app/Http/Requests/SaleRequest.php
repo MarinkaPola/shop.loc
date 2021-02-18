@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class AreaRequest extends FormRequest
+class SaleRequest extends FormRequest
 {
 
 
@@ -17,7 +17,7 @@ class AreaRequest extends FormRequest
     public function rules()
     {
         return [
-            'title' => 'required|string|min:3|max:100',
+            'value_percentage' => 'required|integer|min:5|max:50',
 
         ];
     }

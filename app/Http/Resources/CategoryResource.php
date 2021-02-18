@@ -24,7 +24,9 @@ class CategoryResource extends JsonResource
         return [
             'id' => $this->id,
             'title' => $this->title,
-            'category_goods' => GoodResource::collection($this->whenLoaded('categoryGoods')),
+            'category_sales' => SaleResource::collection($this->whenLoaded('sales')),
+            'category_goods' => GoodResource::collection($this->whenLoaded('categoryGoods'))
+
         ];
     }
 }

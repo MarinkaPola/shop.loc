@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\GoodOrderRequest;
-use App\Models\User;
+use App\Models\Category;
 use App\Models\Good;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -11,6 +11,8 @@ use Illuminate\Http\Request;
 use App\Http\Requests\GoodRequest;
 use App\Http\Resources\GoodResource;
 use App\Http\Resources\GoodResourceCollection;
+use App\Http\Resources\CategoryResource;
+use App\Http\Resources\CategoryResourceCollection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
@@ -27,58 +29,28 @@ class GoodController extends Controller
      */
     public function index()
     {
-        if (request()->input('search') =='')
-        {
-        $goods = Good::all();
-        if (request()->input('sortBy') =='price' and request()->input('sortByDesc') ==''){
-        $goods_sortByPrice = $goods->sortBy('price');
-            return $this->success($goods_sortByPrice);
+        $sortBy = request()->input('sortBy');
+        $sortOrder = request()->input('sortOrder'); //ASC, DESC
+        $goodsQuery = Good::query(); //query()     возможность добавлять квери параметры в запрос, по которым в базе делать отбор для формирования коллекции
+        if (request()->filled('search')){
+            $search = '%'.request()->input('search').'%';
+            $goodsQuery->where(function ($query) use ($search){
+                $query->where('title', 'like', $search)
+                ->orWhere('feature', 'like', $search );
+            });
         }
-        elseif (request()->input('sortBy') =='sale' and request()->input('sortByDesc') ==''){
-        $goods_sortBySale = $goods->sortBy('sale');
-            return $this->success($goods_sortBySale);
-        }
-        elseif (request()->input('sortBy') =='' and request()->input('sortByDesc') =='price'){
-        $goods_sortByDescPrice = $goods->sortByDesc('price');
-            return $this->success($goods_sortByDescPrice);
-        }
-        elseif (request()->input('sortBy') =='' and request()->input('sortByDesc') =='sale'){
-        $goods_sortByDescSale = $goods->sortByDesc('sale');
-            return $this->success($goods_sortByDescSale);
-        }
-        else{
-        return GoodResource::collection($goods);
-        }
-        }
-
-    else {
-        $goods = Good::where(function ($query) {
-            $query->where('title', 'like', request()->input('search'))
-                ->orWhere('feature', 'like', request()->input('search'));
-        })->paginate();
-        if (request()->input('sortBy') =='' and request()->input('sortByDesc') =='')
-        {
+    if ($sortBy){
+    $goodsQuery->orderBy($sortBy, $sortOrder);
+    }
+    if (request()->filled('category_id')) {
+           $goods = $goodsQuery->where('category_id',request()->category_id)->with(['sales', 'category', 'category.areaCategory'])->paginate();
+    }
+   else {
+       $goods = $goodsQuery->with(['sales', 'category', 'category.areaCategory'])->paginate();
+         }
         return $this->success(GoodResourceCollection::make($goods));
-        }
-        elseif (request()->input('sortBy') =='price' and request()->input('sortByDesc') ==''){
-            $goods_sortByPrice = $goods->sortBy('price');
-            return $this->success($goods_sortByPrice);
-        }
-        elseif (request()->input('sortBy') =='sale' and request()->input('sortByDesc') ==''){
-            $goods_sortBySale = $goods->sortBy('sale');
-            return $this->success($goods_sortBySale);
-        }
-        elseif (request()->input('sortBy') =='' and request()->input('sortByDesc') =='price'){
-            $goods_sortByDescPrice = $goods->sortByDesc('price');
-            return $this->success($goods_sortByDescPrice);
-        }
-        elseif (request()->input('sortBy') =='' and request()->input('sortByDesc') =='sale'){
-            $goods_sortByDescSale = $goods->sortByDesc('sale');
-            return $this->success($goods_sortByDescSale);
-        }
-        }
+    }
 
-        }
 
     /**
      * Store a newly created resource in storage.
@@ -100,7 +72,7 @@ class GoodController extends Controller
      */
     public function show(Good $good)
     {
-        return $this->success(GoodResource::make($good));
+        return $this->success(GoodResource::make($good)->load(['sales']));
     }
 
     /**
@@ -126,14 +98,9 @@ class GoodController extends Controller
      */
     public function destroy(Good $good)
     {
-        try {
             $good->delete();
-        } catch (Exception $e) {
-            return null;
-        }
         return $this->success('Record deleted.', JsonResponse::HTTP_NO_CONTENT);
     }
-
 
 
     }

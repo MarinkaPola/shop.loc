@@ -23,7 +23,9 @@ class AreaResource extends JsonResource
         return [
             'id' => $this->id,
             'title' => $this->title,
-            'area_categories' => CategoryResource::collection($this->whenLoaded('areaCategoies')),
+            'area_sales' => SaleResource::collection($this->whenLoaded('sales')),
+            'area_categories' => CategoryResource::collection($this->whenLoaded('areaCategoies'))
+
 
         ];
     }

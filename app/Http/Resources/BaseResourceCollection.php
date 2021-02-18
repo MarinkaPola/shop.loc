@@ -35,12 +35,6 @@ class BaseResourceCollection extends ResourceCollection
      */
     public function toArray($request)
     {
-        $this->links = [
-            'first' => $this->url(1),
-            'last' => $this->url($this->lastPage()),
-            'prev' => $this->previousPageUrl(),
-            'next' => $this->nextPageUrl()
-        ];
 
         $this->meta = [
             'count' => $this->count(),

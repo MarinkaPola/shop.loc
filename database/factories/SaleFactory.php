@@ -1,20 +1,17 @@
 <?php
-
+/** var Factory $factory */
 namespace Database\Factories;
-
-
-use App\Models\Category;
-use App\Models\Area;
+use App\Models\Sale;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class CategoryFactory extends Factory
+class SaleFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = Category::class;
+    protected $model = Sale::class;
 
     /**
      * Define the model's default state.
@@ -23,10 +20,8 @@ class CategoryFactory extends Factory
      */
     public function definition()
     {
-       // $area = Area::inRandomOrder()->first();
         return [
-            'title' => $this->faker->word,
-           // 'area_id' =>$area->id
+            'value_percentage' =>$this->faker->numberBetween($min = 5, $max = 50),
         ];
     }
 }

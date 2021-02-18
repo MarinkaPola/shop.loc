@@ -22,6 +22,7 @@ class UserRequest extends FormRequest
             'country' => 'required|string|max:100',
             'city' => 'required|string|max:100',
             'phone' => 'required|string|max:30',
+            'email' => 'required|email|unique:users,email,'.auth()->id(),
         ];
     }
 }

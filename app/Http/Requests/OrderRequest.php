@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Order;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
@@ -17,27 +18,17 @@ class OrderRequest extends FormRequest
     public function rules()
     {
         $rules = [];
-        if ($this->isMethod('post')) {
-            $rules = [
-                'payment' => 'nullable|null',
-                'delivery' =>'nullable|null',
-                'goods_is_paid' =>'nullable|null',
-                'buyer_id' => 'required|integer|exists:users,id',
-                'sum' => 'nullable|null',
-            ];
-        } elseif ($this->isMethod('put')) {
+        if ($this->isMethod('put')) {
             $rules = [
                 'payment' => [
                     'required',
-                    Rule::in(['cod', 'cash', 'paymentByCard']),
+                    Rule::in(Order::PAYMENT),
                 ],
                 'delivery' =>[
                     'required',
-                    Rule::in(['pickup', 'courierDelivery']),
+                    Rule::in(Order::DELIVERY),
                 ],
-                'goods_is_paid' => 'required|boolean',
-                'buyer_id' => 'required|integer|exists:users,id',
-                'sum' => 'required|numeric',
+                //'goods_is_paid' => 'required|boolean',
             ];
         }
         return $rules;

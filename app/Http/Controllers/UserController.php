@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\GoodResource;
 use App\Models\User;
 use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Http\Requests\UserRequest;
 use App\Http\Resources\UserResource;
@@ -24,8 +26,8 @@ class UserController extends Controller
      */
     public function index()
     {
-            $users = User::all();
-            return UserResource::collection($users);
+            $users = User::paginate();
+        return $this->success(UserResourceCollection::make($users));
     }
 
 
@@ -63,13 +65,16 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-       try{
            $user ->delete();
-       }
-        catch (Exception $e) {
-           return null;
-        }
         return $this->success('Record deleted.', JsonResponse::HTTP_NO_CONTENT);
     }
+
+    public function basket_now()
+        {
+        $user=auth()->user();
+      //  $goods_in_basket= $user->order()->whereNull('payment')->whereNull('delivery')->latest()->firstOrCreate();
+        $goods_in_basket = $user->cart;
+        return  $this->success($goods_in_basket);
+        }
 
 }

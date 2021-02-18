@@ -33,7 +33,7 @@ class UserFactory extends Factory
             'city' => $this->faker->city,
             'phone' => $this->faker->e164PhoneNumber,
             'role' => $this->faker->randomElement(User::ROLES),
-            'password' => Hash::make('123456'),
+            'password' => '123456',
             'remember_token' => Str::random(10),
         ];
     }

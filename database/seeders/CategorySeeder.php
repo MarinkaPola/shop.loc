@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Area;
 use App\Models\Category;
 use Illuminate\Database\Seeder;
 
@@ -16,6 +17,9 @@ class CategorySeeder extends Seeder
      */
     public function run()
     {
-        Category::factory( 20)->create();
+        Area::all()->each(function (Area $area){
+        $area->areaCategoies()->saveMany(Category::factory( 2)->make());
+        });
+        //Category::factory( 20)->create();
     }
 }

@@ -39,13 +39,9 @@ class OrderPolicy
      */
     public function create(User $user)
     {
-        if
-        (($user->role === User::ROLE_ADMIN)
-            or
-            ($user->id == request()->buyer_id))
-        {
+
             return true;
-       }
+
     }
     /**
      * Determine whether the user can view the model.
@@ -65,16 +61,11 @@ class OrderPolicy
      * Determine whether the user can update the model.
      *
      * @param \App\Models\User $user
-     * @param \App\Models\Order $order
      * @return mixed
      */
-    public function update(User $user, Order $order)
+    public function update(User $user)
     {
-        if ($user->role === User::ROLE_ADMIN or $user->id === $order->buyer_id)
-        {
-            return true;
-        }
-
+        return true;
     }
 
 

@@ -16,11 +16,11 @@ class CreateOrdersTable extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->enum('payment', Order::PAYMENT);
-            $table->enum('delivery', Order::DELIVERY);
-            $table->boolean('goods_is_paid');
+            $table->enum('payment', Order::PAYMENT)->nullable();
+            $table->enum('delivery', Order::DELIVERY)->nullable();
+            $table->boolean('goods_is_paid')->default('0');
             $table->unsignedBigInteger('buyer_id');
-            $table->integer('sum');
+            $table->integer('sum')->nullable();
             $table->timestamps();
             $table->softDeletes();
 

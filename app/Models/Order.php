@@ -21,19 +21,14 @@ class Order extends Model
 
 
     protected $fillable = [
-        'buyer_id',
+       // 'buyer_id',
         'payment',
         'delivery',
         'goods_is_paid',
         'sum',
     ];
 
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     *
-     */
+
 
     const PAYMENT = [
         self::PAYMENT_BYCARD,

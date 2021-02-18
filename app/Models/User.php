@@ -66,7 +66,7 @@ class User extends Authenticatable
     /**
      * @param string $value
      */
-    public function setPasswordAttribute($value)
+    public function setPasswordAttribute($value)         //мутатор
     {
         $this->attributes['password'] = Hash::make($value);
     }
@@ -76,6 +76,9 @@ class User extends Authenticatable
         return $this->hasMany(Order::class, 'buyer_id');
     }
 
-
+public function getCartAttribute()     //аксессор
+{
+ return $this->order()->whereNull('payment')->whereNull('delivery')->latest()->firstOrCreate();
+}
 
 }

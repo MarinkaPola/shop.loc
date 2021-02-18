@@ -2,10 +2,11 @@
 
 namespace App\Policies;
 use Illuminate\Http\Request;
+use App\Models\Sale;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class UserPolicy
+class SalePolicy
 {
     use HandlesAuthorization;
 
@@ -23,7 +24,7 @@ class UserPolicy
      */
     public function viewAny(User $user)
     {
-            return false;
+        return true;
 
     }
 
@@ -31,15 +32,12 @@ class UserPolicy
      * Determine whether the user can view the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\User  $model
      * @return mixed
      */
-    public function view(User $user, User $model)
+    public function view(User $user)
     {
-        if ($model->id === $user->id)
-         {
-            return true;
-        }
+        return true;
+
     }
 
     /**
@@ -57,56 +55,34 @@ class UserPolicy
      * Determine whether the user can update the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\User  $model
      * @return mixed
      */
     public function update(User $user, User $model)
     {
-        if ($model->id === $user->id){
-        return true;
-    }
+        return false;
     }
 
     /**
      * Determine whether the user can delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\User  $model
      * @return mixed
      */
-    public function delete(User $user, User $model)
+    public function delete(User $user)
     {
-    if ($model->id === $user->id)
-        {
-        return true;
-        }
+        return false;
     }
     /**
      * Determine whether the user can restore the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\User  $model
      * @return mixed
      */
-    public function restore(User $user, User $model)
+    public function restore(User $user)
     {
-            return false;
+        return false;
 
     }
 
-    /**
-     * Determine whether the user can view the model.
-     *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\User  $model
-     * @return mixed
-     */
-    public function basket_now(User $user, User $model)
-    {
-        if ($model->id === $user->id)
-        {
-            return true;
-       }
-    }
 
 }

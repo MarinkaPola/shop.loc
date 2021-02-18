@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 use App\Models\Good;
 use App\Models\Order;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 
 
@@ -18,11 +19,12 @@ class OrderSeeder extends Seeder
 
     public function run()
     {
-        $orders = Order::factory(30)
-            ->create();
-        foreach ($orders as $order) {
-            $order->orderGoods()->attach(Good::inRandomOrder()->take(2)->get());
+        User::all()->each(function (User $user) {
+            $orders = $user->order()->saveMany(Order::factory(1)->make());
+            foreach ($orders as $order) {
+                $order->orderGoods()->attach(Good::inRandomOrder()->take(2)->get());
 
-        }
+            }
+            });
     }
 }

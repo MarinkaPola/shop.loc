@@ -1,6 +1,7 @@
 <?php
 
 namespace Database\Seeders;
+use App\Models\Category;
 use App\Models\Good;
 use Illuminate\Database\Seeder;
 
@@ -14,7 +15,9 @@ class GoodSeeder extends Seeder
      */
     public function run()
     {
-        Good::factory( 40)->create();
+        Category::all()->each(function (Category $category){
+            $category->categoryGoods()->saveMany(Good::factory( 4)->make());
+        });
     }
 
 
