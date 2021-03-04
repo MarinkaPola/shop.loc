@@ -1,17 +1,17 @@
 <?php
 
 namespace App\Http\Resources;
-use App\Models\Category;
+use App\Models\Review;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
  * Class CategoryResource
  * @package App\Http\Resources
- * @mixin Category
+ * @mixin Review
  */
 
-class CategoryResource extends JsonResource
+class ReviewResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -23,11 +23,11 @@ class CategoryResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'title' => $this->title,
-            'category_sales' => SaleResource::collection($this->whenLoaded('sales')),
-            'area_category' => AreaResource::make($this->whenLoaded('areaCategory')),
-            'category_goods' => GoodResource::collection($this->whenLoaded('categoryGoods'))
-
+            'text' => $this->text,
+            'review_good' => GoodResource::make($this->whenLoaded('review_good')),
+            'author_id' => $this->author_id,
+            'created_at' => $this->created_at->toDateTimeString(),
+            'updated_at' => $this->updated_at->toDateTimeString(),
         ];
     }
 }

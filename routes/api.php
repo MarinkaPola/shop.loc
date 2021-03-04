@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ReviewController;
 use Illuminate\Http\Request;
 
 use App\Http\Controllers\CategoryController;
@@ -41,11 +42,13 @@ Route::apiResource('area', AreaController::class);
 Route::apiResource('order', OrderController::class);
 Route::post('/good/in-basket', [OrderController::class, 'good_in_basket']);
 Route::put('/good/out-basket', [OrderController::class, 'good_out_basket']);
-Route::apiResource('good', GoodController::class);
+Route::apiResource('goods', GoodController::class);
+Route::apiResource('/goods/{good}/reviews', ReviewController::class)->only(['index', 'store']);
+Route::apiResource('reviews', ReviewController::class)->only(['show', 'update', 'destroy']);
 Route::apiResource('sale', SaleController::class);
 
 
-
+//Route::get('/send-notification', [OrderController::class, 'sendOrderAcceptedNotification']);
 });
 
 Route::fallback( [AuthController::class, 'fallback']);

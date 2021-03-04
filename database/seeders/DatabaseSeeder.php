@@ -20,7 +20,8 @@ class DatabaseSeeder extends Seeder
             GoodSeeder::class,
             UserSeeder::class,
             OrderSeeder::class,
-            SaleSeeder::class
+            SaleSeeder::class,
+            ReviewSeeder::class
         ]);
     }
 }

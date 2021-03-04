@@ -14,7 +14,8 @@ use Illuminate\Http\Request;
 use App\Http\Requests\OrderRequest;
 use App\Http\Resources\OrderResource;
 use App\Http\Resources\OrderResourceCollection;
-use Illuminate\Support\Facades\DB;
+use App\Notifications\OrderAccepted;
+
 
 class OrderController extends Controller
 {
@@ -147,21 +148,19 @@ class OrderController extends Controller
         /** @var User $user */
         $user = auth()->user();
         if ($user->role === User::ROLE_USER) {
-        /** @var Order $order */
-        $order = $user->order()->whereNull('payment')->whereNull('delivery')->latest()->first();
         $sum =0;
         /** @var Good $good */
         foreach ($order->orderGoods as $good) {
-            $sales_good = $good->sales->toArray();
-            $sales_category = $good->category->sales->toArray();
-            $sales_area = $good->category->areaCategory->sales->toArray();
-            $masiv_sales = array_merge($sales_good, $sales_category, $sales_area);
-            $masiv_value_percentage = array_column($masiv_sales, 'value_percentage');
-            $max_sale = max($masiv_value_percentage);
-            $sum=$sum+($good->pivot->count)*($good->price)*((100-$max_sale)/100);
+            $sales_good = $good->sales->pluck('value_percentage');
+            $sales_category = $good->category->sales->pluck('value_percentage');
+            //dd($sales_category); работает усли category i area no null
+            $sales_area = $good->category->areaCategory->sales->pluck('value_percentage');
+            $masiv_sales = $sales_good->concat($sales_category)->concat($sales_area);
+            $max_sale = $masiv_sales->max();
+            $sum=$sum+round(($good->pivot->count)*($good->price)*((100-$max_sale)/100), 2);
         }
-
         $order->update($request->validated()+['sum'=>$sum]);
+        $user->notify( new OrderAccepted($order));
         }
         elseif ($user->role === User::ROLE_ADMIN){
             $order->update(['goods_is_paid'=>1]);
@@ -181,5 +180,7 @@ class OrderController extends Controller
             $order->delete();
         return $this->success('Record deleted.', JsonResponse::HTTP_NO_CONTENT);
     }
+
+
 
     }

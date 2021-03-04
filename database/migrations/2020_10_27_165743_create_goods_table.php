@@ -20,8 +20,9 @@ class CreateGoodsTable extends Migration
             $table->string('photo', 150)->nullable();
             $table->integer('count');
             $table->mediumText('feature');
-            $table->integer('price');
-            $table->integer('sale');
+            $table->decimal('price');
+            $table->string('brand');
+            $table->integer('rating')->default('0');
             $table->unsignedBigInteger('category_id');
             $table->timestamps();
             $table->softDeletes();

@@ -2,8 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\GoodOrderRequest;
-use App\Models\Category;
+
 use App\Models\Good;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -11,10 +10,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\GoodRequest;
 use App\Http\Resources\GoodResource;
 use App\Http\Resources\GoodResourceCollection;
-use App\Http\Resources\CategoryResource;
-use App\Http\Resources\CategoryResourceCollection;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Database\Eloquent\Relations\Pivot;
+
 
 class GoodController extends Controller
 {
@@ -42,11 +38,15 @@ class GoodController extends Controller
     if ($sortBy){
     $goodsQuery->orderBy($sortBy, $sortOrder);
     }
+    if (request()->filled('brand'))
+    {
+        $goodsQuery->where('brand', request()->brand);
+    }
     if (request()->filled('category_id')) {
-           $goods = $goodsQuery->where('category_id',request()->category_id)->with(['sales', 'category', 'category.areaCategory'])->paginate();
+           $goods = $goodsQuery->where('category_id',request()->category_id)->with(['sales', 'category.sales', 'category.areaCategory.sales'])->paginate();
     }
    else {
-       $goods = $goodsQuery->with(['sales', 'category', 'category.areaCategory'])->paginate();
+       $goods = $goodsQuery->with(['sales', 'category.sales', 'category.areaCategory.sales'])->paginate();
          }
         return $this->success(GoodResourceCollection::make($goods));
     }

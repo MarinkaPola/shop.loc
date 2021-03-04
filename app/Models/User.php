@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Notifications\OrderAccepted;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -12,6 +13,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\HasApiTokens;
 
+
 class User extends Authenticatable
 {
     use  HasApiTokens, Notifiable, SoftDeletes, HasFactory;
@@ -19,6 +21,8 @@ class User extends Authenticatable
 
     const ROLE_USER = 'user';
     const ROLE_ADMIN = 'admin';
+
+
 
 
     /**
@@ -76,9 +80,16 @@ class User extends Authenticatable
         return $this->hasMany(Order::class, 'buyer_id');
     }
 
+    public function reviews(): HasMany
+    {
+        return $this->hasMany(Review::class, 'author_id');
+    }
+
 public function getCartAttribute()     //аксессор
 {
  return $this->order()->whereNull('payment')->whereNull('delivery')->latest()->firstOrCreate();
 }
+
+
 
 }

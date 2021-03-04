@@ -22,7 +22,7 @@ class GoodRequest extends FormRequest
                 'feature' => 'required|string|min:10|max:200',
                 'count' => 'required|integer|min:1|max:10',
                 'price' => 'required|numeric|min:1',
-                'sale' => 'required|integer|min:0|max:70',
+                'brand' => 'required|string|min:2|max:60',
                 'category_id' => 'required|integer|exists:categories,id',
 
             ];

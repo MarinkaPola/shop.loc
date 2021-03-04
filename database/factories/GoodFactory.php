@@ -35,7 +35,8 @@ class GoodFactory extends Factory
             'feature' =>$this->faker->text($maxNbChars = 100),
             'count' => $this->faker->numberBetween($min = 1, $max = 5),
             'price' => $this->faker->numberBetween($min = 1, $max = 500),
-            'sale'=> $this->faker->numberBetween($min = 0, $max = 70),
+            'brand'=> $this->faker->word,
+            'rating' => '0',
             'category_id'=>$category->id,
         ];
     }

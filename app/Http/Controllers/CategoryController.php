@@ -1,12 +1,9 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Http\Controllers\Controller;
-use App\Http\Resources\AreaResource;
-use App\Http\Resources\UserResource;
-use App\Http\Resources\UserResourceCollection;
 
 use App\Models\Category;
+use App\Models\Good;
 use Exception;
 use Illuminate\Http\Request;
 use App\Http\Requests\CategoryRequest;
@@ -70,7 +67,10 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
+        $category->categoryGoods()->each(function (Good $good){$good->delete();});
+
             $category->delete();
+
         return $this->success('Record deleted.', JsonResponse::HTTP_NO_CONTENT);
     }
 }

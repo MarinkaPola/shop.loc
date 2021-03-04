@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 
+use App\Models\Category;
+use App\Models\Good;
 use App\Models\User;
 use App\Models\Area;
 use Exception;
@@ -72,14 +74,19 @@ class AreaController extends Controller
      * Remove the specified resource from storage.
      *
      * @param \App\Models\Area $area
+     * @param  \App\Models\Good  $good
      * @return \Illuminate\Http\JsonResponse
      * @throws \Exception
      */
     public function destroy(Area $area)
     {
+         $area->areaCategoies()->each(function (Category $category) use ($area) {$category->categoryGoods()->each(function (Good $good){$good->delete();});
+
+        $area->areaCategoies()->each(function (Category $category){$category->delete();});
         $area->delete();
         return $this->success('Record deleted.', JsonResponse::HTTP_NO_CONTENT);
-    }
+    });
 
 
+}
 }
