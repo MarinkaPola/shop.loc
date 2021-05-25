@@ -42,7 +42,7 @@ Route::apiResource('area', AreaController::class);
 Route::apiResource('order', OrderController::class);
 Route::post('/good/in-basket', [OrderController::class, 'good_in_basket']);
 Route::put('/good/out-basket', [OrderController::class, 'good_out_basket']);
-Route::apiResource('goods', GoodController::class);
+    Route::apiResource('goods', GoodController::class)->except(['index']);
 Route::apiResource('/goods/{good}/reviews', ReviewController::class)->only(['index', 'store']);
 Route::apiResource('reviews', ReviewController::class)->only(['show', 'update', 'destroy']);
 Route::apiResource('sale', SaleController::class);
@@ -52,3 +52,4 @@ Route::apiResource('sale', SaleController::class);
 });
 
 Route::fallback( [AuthController::class, 'fallback']);
+Route::apiResource('goods', GoodController::class)->only(['index']);
