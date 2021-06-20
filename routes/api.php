@@ -25,7 +25,7 @@ use App\Http\Controllers\SaleController;
 */
 
 //Route::middleware('auth:api')->get('/user', function (Request $request) {
-  //  return $request->user();
+//  return $request->user();
 //});
 //Auth routes
 
@@ -36,20 +36,21 @@ Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:sanct
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/user/basket-now', [UserController::class, 'basket_now']);
-Route::apiResource('user', UserController::class);
-Route::apiResource('category', CategoryController::class);
-Route::apiResource('area', AreaController::class);
-Route::apiResource('order', OrderController::class);
-Route::post('/good/in-basket', [OrderController::class, 'good_in_basket']);
-Route::put('/good/out-basket', [OrderController::class, 'good_out_basket']);
-    Route::apiResource('goods', GoodController::class)->except(['index']);
-Route::apiResource('/goods/{good}/reviews', ReviewController::class)->only(['index', 'store']);
-Route::apiResource('reviews', ReviewController::class)->only(['show', 'update', 'destroy']);
-Route::apiResource('sale', SaleController::class);
+    Route::apiResource('user', UserController::class);
+    Route::apiResource('category', CategoryController::class);
+    Route::apiResource('area', AreaController::class)->except(['index']);
+    Route::apiResource('order', OrderController::class);
+    Route::post('/good/in-basket', [OrderController::class, 'good_in_basket']);
+    Route::put('/good/out-basket', [OrderController::class, 'good_out_basket']);
+    Route::apiResource('goods', GoodController::class)->except(['index', 'show']);
+    Route::apiResource('/goods/{good}/reviews', ReviewController::class)->only(['index', 'store']);
+    Route::apiResource('reviews', ReviewController::class)->only(['show', 'update', 'destroy']);
+    Route::apiResource('sale', SaleController::class);
 
 
 //Route::get('/send-notification', [OrderController::class, 'sendOrderAcceptedNotification']);
 });
 
-Route::fallback( [AuthController::class, 'fallback']);
-Route::apiResource('goods', GoodController::class)->only(['index']);
+Route::fallback([AuthController::class, 'fallback']);
+Route::apiResource('goods', GoodController::class)->only(['index', 'show']);
+Route::apiResource('area', AreaController::class)->only(['index']);

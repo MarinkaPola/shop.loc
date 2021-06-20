@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 
+use App\Models\Category;
 use App\Models\Good;
 use Exception;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Http\Requests\GoodRequest;
@@ -18,36 +20,41 @@ class GoodController extends Controller
     {
         $this->authorizeResource(Good::class);
     }
+
     /**
      * Display a listing of the resource.
      *
-    @return JsonResponse
+     * @return JsonResponse
      */
     public function index()
     {
         $sortBy = request()->input('sortBy');
         $sortOrder = request()->input('sortOrder'); //ASC, DESC
         $goodsQuery = Good::query(); //query()     возможность добавлять квери параметры в запрос, по которым в базе делать отбор для формирования коллекции
-        if (request()->filled('search')){
-            $search = '%'.request()->input('search').'%';
-            $goodsQuery->where(function ($query) use ($search){
+        if (request()->filled('search')) {
+            $search = '%' . request()->input('search') . '%';
+            $goodsQuery->where(function ($query) use ($search) {
                 $query->where('title', 'like', $search)
-                ->orWhere('feature', 'like', $search );
+                    ->orWhere('feature', 'like', $search);
             });
         }
-    if ($sortBy){
-    $goodsQuery->orderBy($sortBy, $sortOrder);
-    }
-    if (request()->filled('brand'))
-    {
-        $goodsQuery->where('brand', request()->brand);
-    }
-    if (request()->filled('category_id')) {
-           $goods = $goodsQuery->where('category_id',request()->category_id)->with(['sales', 'category.sales', 'category.areaCategory.sales'])->paginate();
-    }
-   else {
-       $goods = $goodsQuery->with(['sales', 'category.sales', 'category.areaCategory.sales'])->paginate();
-         }
+        if ($sortBy) {
+            $goodsQuery->orderBy($sortBy, $sortOrder);
+        }
+        if (request()->filled('brand')) {
+            $goodsQuery->where('brand', request()->brand);
+        }
+        if (request()->filled('category_id')) {
+            $goods = $goodsQuery->where('category_id', request()->category_id)->with(['sales', 'category.sales', 'category.areaCategory.sales'])->paginate();
+        }
+        else if(request()->filled('area_id')) {
+            $categories_id = Category::where('area_id', request()->area_id)->get('id');
+                $goods=Good::whereIn('category_id', $categories_id)->with(['sales', 'category.sales', 'category.areaCategory.sales'])->paginate();
+            }
+
+         else {
+            $goods = $goodsQuery->with(['sales', 'category.sales', 'category.areaCategory.sales'])->paginate();
+        }
         return $this->success(GoodResourceCollection::make($goods));
     }
 
@@ -55,7 +62,7 @@ class GoodController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  GoodRequest $request
+     * @param GoodRequest $request
      * @return JsonResponse
      */
     public function store(GoodRequest $request)
@@ -64,10 +71,11 @@ class GoodController extends Controller
         $good = Good::create($request->validated());
         return $this->created(GoodResource::make($good));
     }
+
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Good  $good
+     * @param \App\Models\Good $good
      * @return JsonResponse
      */
     public function show(Good $good)
@@ -98,11 +106,11 @@ class GoodController extends Controller
      */
     public function destroy(Good $good)
     {
-            $good->delete();
+        $good->delete();
         return $this->success('Record deleted.', JsonResponse::HTTP_NO_CONTENT);
     }
 
 
-    }
+}
 
 

@@ -41,7 +41,7 @@ public function create(User $user)
 * @return mixed
 */
 
-public function view(User $user)
+public function view(?User $user)
 {
 return true;
 }

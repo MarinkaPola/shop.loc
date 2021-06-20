@@ -23,7 +23,7 @@ class RegisterRequest extends FormRequest
             'country' => 'required|string|max:100',
             'city' => 'required|string|max:100',
             'phone' => 'required|string|max:30',
-            'role' => ['required', 'string', Rule::in(array_diff(User::ROLES, [User::ROLE_ADMIN]))]
+          //  'role' => ['required', 'string', Rule::in(array_diff(User::ROLES, [User::ROLE_ADMIN]))]
         ];
 
     }

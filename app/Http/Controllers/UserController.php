@@ -73,8 +73,8 @@ class UserController extends Controller
         {
         $user=auth()->user();
       //  $goods_in_basket= $user->order()->whereNull('payment')->whereNull('delivery')->latest()->firstOrCreate();
-        $goods_in_basket = $user->cart;
-        return  $this->success($goods_in_basket);
+        $goods_in_basket = $user->cart->load(['orderGoods']);
+        return  $this->success(($goods_in_basket));
         }
 
 }
