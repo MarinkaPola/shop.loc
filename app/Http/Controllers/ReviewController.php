@@ -43,7 +43,10 @@ class ReviewController extends Controller
     public function store(ReviewRequest $request, Good $good )
 
     {
-       // $good = Good::findOrFail(request()->good_id);
+        $user=auth()->user();
+        if($user && $good->reviews()->where('author_id', $user->id )->exists()){
+            return $this->error('You can only leave one comment', 422);
+        }
         /** @var Review $review */
         $review  = $good->reviews()->create($request->validated());
         $mark_count = $good->reviews()->count();

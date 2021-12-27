@@ -73,8 +73,25 @@ class UserController extends Controller
         {
         $user=auth()->user();
       //  $goods_in_basket= $user->order()->whereNull('payment')->whereNull('delivery')->latest()->firstOrCreate();
-        $goods_in_basket = $user->cart->load(['orderGoods']);
-        return  $this->success(($goods_in_basket));
+       // $goods_in_basket = $user->cart->load(['orderGoods']);
+            if($user) {
+                $goods = $user->cart->orderGoods()->get();
+                foreach ($goods as $good) {
+                    $sales_good = $good->sales->pluck('value_percentage');
+                    $sales_category = $good->category->sales->pluck('value_percentage');
+                    $sales_area = $good->category->areaCategory->sales->pluck('value_percentage');
+                    $masiv_sales = $sales_good->concat($sales_category)->concat($sales_area);
+                    $max_sale = $masiv_sales->max();
+                    $good['min_price'] = (100 - $max_sale) / 100 * ($good->price);
+                }
+                return $this->success($goods);
+            }
+            return $this->error('Log in as a registered user');
         }
 
+    public function getUser()
+    {
+        $user=auth()->user();
+        return $this->success(UserResource::make($user));
+    }
 }

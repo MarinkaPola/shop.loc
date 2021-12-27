@@ -5,10 +5,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Good;
-use Exception;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use App\Http\Requests\GoodRequest;
 use App\Http\Resources\GoodResource;
 use App\Http\Resources\GoodResourceCollection;
@@ -45,19 +42,30 @@ class GoodController extends Controller
             $goodsQuery->where('brand', request()->brand);
         }
         if (request()->filled('category_id')) {
-            $goods = $goodsQuery->where('category_id', request()->category_id)->with(['sales', 'category.sales', 'category.areaCategory.sales'])->paginate();
+            $goods = $goodsQuery->where('category_id', request()->category_id)->with(['sales',
+                'category.sales', 'category.areaCategory.sales'])->paginate(16, ['*'], 'current_page');
         }
         else if(request()->filled('area_id')) {
             $categories_id = Category::where('area_id', request()->area_id)->get('id');
-                $goods=Good::whereIn('category_id', $categories_id)->with(['sales', 'category.sales', 'category.areaCategory.sales'])->paginate();
+                $goods=$goodsQuery->whereIn('category_id', $categories_id)->with(['sales', 'category.sales', 'category.areaCategory.sales'])->paginate(16, ['*'], 'current_page');
             }
 
-         else {
-            $goods = $goodsQuery->with(['sales', 'category.sales', 'category.areaCategory.sales'])->paginate();
-        }
+         else{
+             $goods = $goodsQuery->with(['sales', 'category.sales', 'category.areaCategory.sales'])->paginate(16, ['*'], 'current_page');
+         }
         return $this->success(GoodResourceCollection::make($goods));
     }
 
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return JsonResponse
+     */
+    public function index_brand(){
+        $brands = Good::all()->pluck('brand')->unique();
+        return $this->success($brands);
+    }
 
     /**
      * Store a newly created resource in storage.
@@ -80,7 +88,14 @@ class GoodController extends Controller
      */
     public function show(Good $good)
     {
-        return $this->success(GoodResource::make($good)->load(['sales']));
+        $sales_good = $good->sales->pluck('value_percentage');
+        $sales_category = $good->category->sales->pluck('value_percentage');
+        $sales_area = $good->category->areaCategory->sales->pluck('value_percentage');
+        $masiv_sales = $sales_good->concat($sales_category)->concat($sales_area);
+        $max_sale = $masiv_sales->max();
+        $good['max_sale'] = $max_sale;
+        return $this->success(GoodResource::make($good)->load(['sales', 'category',
+            'category.sales', 'category.areaCategory.sales', 'reviews', 'reviews.author']));
     }
 
     /**

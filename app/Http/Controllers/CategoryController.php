@@ -42,7 +42,7 @@ class CategoryController extends Controller
      */
     public function show(Category $category)
     {
-        return $this->success(CategoryResource::make($category)->load(['sales']));
+        return $this->success(CategoryResource::make($category)->load(['sales', 'areaCategory']));
     }
 
     /**

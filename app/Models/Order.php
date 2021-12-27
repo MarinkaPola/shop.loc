@@ -21,10 +21,10 @@ class Order extends Model
 
 
     protected $fillable = [
-       // 'buyer_id',
         'payment',
         'delivery',
         'goods_is_paid',
+        'info',
         'sum',
     ];
 
@@ -40,6 +40,8 @@ class Order extends Model
         self::DELIVERY_PICKUP,
         self::DELIVERY_COURIER,
     ];
+
+
 
     public function buyer()
     {

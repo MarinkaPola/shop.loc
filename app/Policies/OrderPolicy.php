@@ -16,7 +16,7 @@ class OrderPolicy
     /**
      * Determine whether the user can view any models.
      *
-     * @param \App\Models\User $user
+     * @param User $user
      * @param \App\Models\Order $order
      * @return mixed
      */
@@ -34,7 +34,7 @@ class OrderPolicy
     /**
      * Determine whether the user can create models.
      *
-     * @param \App\Models\User $user
+     * @param User $user
      * @return mixed
      */
     public function create(User $user)
@@ -46,7 +46,7 @@ class OrderPolicy
     /**
      * Determine whether the user can view the model.
      *
-     * @param \App\Models\User $user
+     * @param User $user
      * @param \App\Models\Order $order
      * @return mixed
      */
@@ -60,7 +60,7 @@ class OrderPolicy
     /**
      * Determine whether the user can update the model.
      *
-     * @param \App\Models\User $user
+     * @param User $user
      * @return mixed
      */
     public function update(User $user)
@@ -73,7 +73,7 @@ class OrderPolicy
 /**
 * Determine whether the user can delete the model.
 *
-* @param \App\Models\User $user
+* @param User $user
 * @return mixed
 */
     public function delete(User $user)
@@ -86,7 +86,7 @@ class OrderPolicy
     /**
      * Determine whether the user can restore the model.
      *
-     * @param \App\Models\User $user
+     * @param User $user
      * @return mixed
      */
     public function restore(User $user)
@@ -115,4 +115,16 @@ class OrderPolicy
         }
     }
 
+    /**
+     * Determine whether the user can delete the model.
+     *
+     * @param User $user
+     * @return mixed
+     */
+    public function updatePayment(User $user)
+    {
+        if ($user->role === User::ROLE_ADMIN) {
+            return true;
+        }
+    }
 }

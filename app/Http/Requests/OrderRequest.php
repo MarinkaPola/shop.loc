@@ -28,7 +28,7 @@ class OrderRequest extends FormRequest
                     'required',
                     Rule::in(Order::DELIVERY),
                 ],
-                //'goods_is_paid' => 'required|boolean',
+                'info' => 'required|string|min:10|max:150',
             ];
         }
         return $rules;

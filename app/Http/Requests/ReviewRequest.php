@@ -18,12 +18,12 @@ class ReviewRequest extends FormRequest
         if ($this->isMethod('post')) {
             $rules = [
                 'text' => 'required|string|min:10|max:200',
-                'mark' => 'required|integer|min:1|max:5'
+                'mark' => 'required|integer|min:1|max:10'
             ];
         } elseif ($this->isMethod('put')) {
             $rules = [
                 'text' => 'required|string|min:10|max:200',
-                'mark' => 'required|integer|min:1|max:5'
+                'mark' => 'required|integer|min:1|max:10'
             ];
         }
 

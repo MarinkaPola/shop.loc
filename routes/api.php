@@ -37,20 +37,24 @@ Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:sanct
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/user/basket-now', [UserController::class, 'basket_now']);
     Route::apiResource('user', UserController::class);
-    Route::apiResource('category', CategoryController::class);
-    Route::apiResource('area', AreaController::class)->except(['index']);
+    Route::apiResource('category', CategoryController::class)->except(['show']);
+    Route::apiResource('area', AreaController::class)->except(['index', 'show']);
     Route::apiResource('order', OrderController::class);
     Route::post('/good/in-basket', [OrderController::class, 'good_in_basket']);
     Route::put('/good/out-basket', [OrderController::class, 'good_out_basket']);
     Route::apiResource('goods', GoodController::class)->except(['index', 'show']);
-    Route::apiResource('/goods/{good}/reviews', ReviewController::class)->only(['index', 'store']);
-    Route::apiResource('reviews', ReviewController::class)->only(['show', 'update', 'destroy']);
+    Route::apiResource('/reviews', ReviewController::class)->only(['update', 'destroy']);
+    Route::apiResource('goods/{good}/reviews', ReviewController::class)->only(['store']);
     Route::apiResource('sale', SaleController::class);
-
+    Route::put('order/{order}/updatePayment', [OrderController::class, 'updatePayment']);
+    Route::get('/get-user',[UserController::class, 'getUser']);
 
 //Route::get('/send-notification', [OrderController::class, 'sendOrderAcceptedNotification']);
 });
 
 Route::fallback([AuthController::class, 'fallback']);
 Route::apiResource('goods', GoodController::class)->only(['index', 'show']);
-Route::apiResource('area', AreaController::class)->only(['index']);
+Route::apiResource('category', CategoryController::class)->only(['show']);
+Route::apiResource('area', AreaController::class)->only(['index', 'show']);
+Route::apiResource('/reviews', ReviewController::class)->only(['index', 'show']);
+Route::get('/index_brand',[GoodController::class, 'index_brand']);

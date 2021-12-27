@@ -29,9 +29,13 @@ class GoodResource extends JsonResource
             'price' => $this->price,
             'brand' => $this->brand,
             'category_id' => $this->category_id,
+            'rating' => $this->rating,
             'category' => CategoryResource::make($this->whenLoaded('category')),
-            'sale_goods' => SaleResource::collection($this->whenLoaded('sales'))
-
+            'sale_goods' => SaleResource::collection($this->whenLoaded('sales')),
+            'pivot' => $this->whenPivotLoaded('good_order', function () {
+                return $this->pivot->count;
+            }),
+            'max_sale' => $this->max_sale
         ];
     }
 }
